@@ -3,7 +3,7 @@ use Test::More;
 use Test::Proc;
 use Test::Time;
 
-my $proc = test_proc {
+my $proc = test_proc 'my_work' => sub {
     my $begin = time();
     sleep 3; 
     my $end = time();
@@ -11,11 +11,11 @@ my $proc = test_proc {
     printf "%d sec. elapsed", $end - $begin;
 };
 
-is $proc->poll, 1;
-is $proc->wait, 0;
+$proc->is_work;
+$proc->exit_ok;
+$proc->isnt_work;
 
-is $proc->stdout, '3 sec. elapsed';
-is $proc->stderr, '';
-is $proc->poll, 0;
+$proc->stdout_like(qr/\A3 sec\. elapsed\z/);
+$proc->stderr_like(qr/\A\z/);
 
 done_testing;

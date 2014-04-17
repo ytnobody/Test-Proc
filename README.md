@@ -8,27 +8,35 @@ Test::Proc - Helper tool for testing multi process program.
     use Test::Proc;
     
 
-    my $proc = test_proc {
+    my $proc = test_proc 'my_task' => sub {
         print 'test';
         warn 'dummy';
-        sleep 50;
+        sleep 20;
     };
     
 
-    ok $proc->poll;
+    $proc->is_work;
     
 
-    like $proc->stdout, qr/\Atest/;
-    like $proc->stderr, qr/\Adummy/;
+    $proc->stdout_like( qr/\Atest/ );
+    $proc->stderr_like( qr/\Adummy/ );
     
 
-    $proc->kill('KILL');
-    my $status = $proc->wait;
-    is $status, 255;
+    $proc->exit_ok;
+
+
 
 # DESCRIPTION
 
 Test::Proc is a helper tool for testing multi process product.
+
+# EXPORTS
+
+## test\_proc
+
+    my $proc = test_proc $coderef;
+
+Returns a [Test::Proc::Object](http://search.cpan.org/perldoc?Test::Proc::Object) instance.
 
 # LICENSE
 
@@ -40,3 +48,7 @@ it under the same terms as Perl itself.
 # AUTHOR
 
 ytnobody <ytnobody@gmail.com>
+
+# SEE ALSO
+
+[Test::Proc::Object](http://search.cpan.org/perldoc?Test::Proc::Object)

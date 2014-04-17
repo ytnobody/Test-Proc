@@ -60,5 +60,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ytnobody/Test-Proc/issues"
+      },
+      "homepage" : "https://github.com/ytnobody/Test-Proc",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ytnobody/Test-Proc.git",
+         "web" : "https://github.com/ytnobody/Test-Proc"
+      }
+   },
    "version" : "0.01"
 }

@@ -9,9 +9,9 @@ use Test::Proc::Object;
 our $VERSION = "0.01";
 our @EXPORT = qw/ test_proc /;
 
-sub test_proc (&) {
-    my $code = shift;
-    Test::Proc::Object->new($code);
+sub test_proc ($&) {
+    my ($name, $code) = @_;
+    Test::Proc::Object->new($name, $code);
 }
 
 1;
@@ -28,24 +28,31 @@ Test::Proc - Helper tool for testing multi process program.
     use Test::More;
     use Test::Proc;
     
-    my $proc = test_proc {
+    my $proc = test_proc 'my_task' => sub {
         print 'test';
         warn 'dummy';
-        sleep 50;
+        sleep 20;
     };
     
-    ok $proc->poll;
+    $proc->is_work;
     
-    like $proc->stdout, qr/\Atest/;
-    like $proc->stderr, qr/\Adummy/;
+    $proc->stdout_like( qr/\Atest/ );
+    $proc->stderr_like( qr/\Adummy/ );
     
-    $proc->kill('KILL');
-    my $status = $proc->wait;
-    is $status, 255;
+    $proc->exit_ok;
+
 
 =head1 DESCRIPTION
 
 Test::Proc is a helper tool for testing multi process product.
+
+=head1 EXPORTS
+
+=head2 test_proc
+
+    my $proc = test_proc $coderef;
+
+Returns a L<Test::Proc::Object> instance.
 
 =head1 LICENSE
 
@@ -57,6 +64,10 @@ it under the same terms as Perl itself.
 =head1 AUTHOR
 
 ytnobody E<lt>ytnobody@gmail.comE<gt>
+
+=head1 SEE ALSO
+
+L<Test::Proc::Object>
 
 =cut
 
